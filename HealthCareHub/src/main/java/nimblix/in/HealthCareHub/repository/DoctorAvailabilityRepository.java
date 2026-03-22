@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface DoctorAvailabilityRepository extends JpaRepository<DoctorAvailability, Long> {
 
-    // For ADD
+    
     boolean existsByDoctor_IdAndAvailableDateAndStartTime(
             Long doctorId,
             String availableDate,
@@ -31,7 +31,7 @@ SELECT COUNT(d) > 0 FROM DoctorAvailability d
              @Param("startTime") String startTime,
              @Param("endTime") String endTime
      );
-    // For UPDATE
+   
     boolean existsByDoctor_IdAndAvailableDateAndStartTimeAndIdNot(
             Long doctorId,
             String availableDate,
@@ -47,7 +47,7 @@ AND (
         (:startTime < d.endTime AND :endTime > d.startTime)
 )
 """)
-    //overlapping
+    
     boolean existsOverlappingSlotForUpdate(
             @Param("doctorId") Long doctorId,
             @Param("availableDate") String availableDate,
