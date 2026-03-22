@@ -47,16 +47,16 @@ public class DoctorServiceImpl implements DoctorService {
         {
             return HealthCareConstants.DOCTOR_ALREADY_EXISTS;
         }
-      // getting hospital from database
+      
         Hospital hospital = hospitalRepository.findById(request.getHospitalId())
                 .orElseThrow(() -> new RuntimeException("Hospital not found"));
 
-        // getting specialization using name
+     
         Specialization specialization = specializationRepository
                 .findByName(request.getSpecializationName())
                 .orElseThrow(() -> new RuntimeException("Specialization not found"));
 
-        // creating doctor object
+        
         Doctor doctor = new Doctor();
 
         doctor.setName(request.getDoctorName());
@@ -68,13 +68,13 @@ public class DoctorServiceImpl implements DoctorService {
         doctor.setPhone(request.getPhoneNo());
         doctor.setConsultationFee(request.getConsultationFee());
 
-        // setting relations
+        
         doctor.setHospital(hospital);
         doctor.setSpecialization(specialization);
 
         doctor.setIsActive("active");
 
-        // saving doctor
+       
         doctorRepository.save(doctor);
 
         return "Doctor Registered Successfully";
