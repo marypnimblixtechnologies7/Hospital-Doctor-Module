@@ -71,4 +71,7 @@ AND (
        WHERE d.id = :slotId
        """)
     DoctorAvailabilityResponse getSlotResponseById(@Param("slotId") Long slotId);
+
+
+    List<DoctorAvailability> findByDoctor_Id(Long doctorId);
 }
