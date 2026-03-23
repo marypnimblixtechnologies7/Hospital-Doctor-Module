@@ -3,20 +3,21 @@ package nimblix.in.HealthCareHub.serviceImpl;
 import java.util.Arrays;
 import java.util.List;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import nimblix.in.HealthCareHub.constants.HealthCareConstants;
-import nimblix.in.HealthCareHub.model.Doctor;
-import nimblix.in.HealthCareHub.model.Hospital;
-import nimblix.in.HealthCareHub.model.Specialization;
+import nimblix.in.HealthCareHub.model.*;
 import nimblix.in.HealthCareHub.repository.DoctorRepository;
 import nimblix.in.HealthCareHub.repository.HospitalRepository;
 import nimblix.in.HealthCareHub.repository.SpecializationRepository;
 import nimblix.in.HealthCareHub.request.DoctorRegistrationRequest;
+import nimblix.in.HealthCareHub.response.DoctorProfileResponse;
 import nimblix.in.HealthCareHub.service.HospitalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import nimblix.in.HealthCareHub.model.Role;
 import nimblix.in.HealthCareHub.service.DoctorService;
+
 
 import static nimblix.in.HealthCareHub.constants.HealthCareConstants.DOCTOR_REGISTERED_SUCCESS;
 
@@ -30,6 +31,8 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Autowired
     SpecializationRepository specializationRepository;
+
+
 
     @Override
     public List<String> getAllRoles()
@@ -79,4 +82,58 @@ public class DoctorServiceImpl implements DoctorService {
 
         return "Doctor Registered Successfully";
     }
+    @Override
+    public DoctorProfileResponse getDoctorById(Long doctorId) {
+
+        // Fetch doctor details
+        return doctorRepository.findDoctorProfileById(doctorId)
+
+                // If doctor not found, throw exception
+                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+    }
+
+    @Override
+    public String updateDoctor(Long doctorId, DoctorRegistrationRequest request) {
+
+        // Fetch existing doctor from DB
+        Doctor doctor = doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+
+        // Update only fields that are provided (non-null)
+        if (request.getDoctorName() != null) {
+            doctor.setName(request.getDoctorName());
+        }
+
+        if (request.getDoctorEmail() != null) {
+            doctor.setEmailId(request.getDoctorEmail());
+        }
+
+        if (request.getQualification() != null) {
+            doctor.setQualification(request.getQualification());
+        }
+
+        if (request.getExperience() != null) {
+            doctor.setExperienceYears(request.getExperience());
+        }
+
+        if (request.getDescription() != null) {
+            doctor.setDescription(request.getDescription());
+        }
+
+        if (request.getPhoneNo() != null) {
+            doctor.setPhone(request.getPhoneNo());
+        }
+
+        if (request.getConsultationFee() != null) {
+            doctor.setConsultationFee(request.getConsultationFee());
+        }
+
+        // Save updated doctor back to DB
+        doctorRepository.save(doctor);
+
+        return "Doctor updated successfully";
+    }
+
+
+
 }
