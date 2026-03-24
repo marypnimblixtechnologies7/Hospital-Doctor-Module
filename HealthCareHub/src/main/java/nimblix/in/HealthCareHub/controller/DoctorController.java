@@ -1,6 +1,9 @@
 package nimblix.in.HealthCareHub.controller;
 
+import nimblix.in.HealthCareHub.service.DoctorAvailabilityService;
+
 import java.util.List;
+import nimblix.in.HealthCareHub.request.DoctorAvailabilityRequest;
 
 import nimblix.in.HealthCareHub.model.Doctor;
 import nimblix.in.HealthCareHub.model.Patient;
@@ -20,6 +23,9 @@ public class DoctorController {
     @Autowired
     private DoctorService doctorService;
 
+    @Autowired
+    private DoctorAvailabilityService doctorAvailabilityService;
+
     @GetMapping("/roles")
     public ResponseEntity<List<String>> getAllRoles() {
         return ResponseEntity.ok(doctorService.getAllRoles());
@@ -33,7 +39,10 @@ public class DoctorController {
     // to get doctor details by ID
     @GetMapping("/{doctorId}")
     public ResponseEntity<DoctorProfileResponse> getDoctorById(@PathVariable Long doctorId) {
+<<<<<<< HEAD
         // service to fetch doctor details
+=======
+>>>>>>> 8cad5a0af428948c76e274a5cbbf4b9c8e9de7e2
         DoctorProfileResponse doctor = doctorService.getDoctorById(doctorId);
         return ResponseEntity.ok(doctor);
     }
@@ -43,11 +52,16 @@ public class DoctorController {
     public ResponseEntity<String> updateDoctor(
             @PathVariable Long doctorId,
             @RequestBody DoctorRegistrationRequest request) {
+<<<<<<< HEAD
         // service layer to update doctor
+=======
+
+>>>>>>> 8cad5a0af428948c76e274a5cbbf4b9c8e9de7e2
         String response = doctorService.updateDoctor(doctorId, request);
         return ResponseEntity.ok(response);
     }
 
+<<<<<<< HEAD
     // --- NEW UPDATED API ENDPOINTS ---
 
     // 1. Get doctors list for a hospital
@@ -64,5 +78,18 @@ public class DoctorController {
             @PathVariable int month) {
         List<Patient> patients = doctorService.getPatientsSeenByDoctorInMonth(doctorId, month);
         return ResponseEntity.ok(patients);
+=======
+    @PostMapping("/availability")
+    public ResponseEntity<String> setDoctorAvailability(@RequestBody DoctorAvailabilityRequest request) {
+        return ResponseEntity.ok(doctorAvailabilityService.setAvailability(request));
+    }
+
+    @PostMapping("/{doctorId}/schedule")
+    public ResponseEntity<String> createDoctorSchedule(
+            @PathVariable Long doctorId,
+            @RequestBody List<DoctorAvailabilityRequest> scheduleRequests
+    ) {
+        return ResponseEntity.ok(doctorAvailabilityService.createSchedule(doctorId, scheduleRequests));
+>>>>>>> 8cad5a0af428948c76e274a5cbbf4b9c8e9de7e2
     }
 }
