@@ -60,25 +60,7 @@ public class FinanceController {
 
         return response;
         }
-    //  NEW - Daily Revenue API
-    @GetMapping("/revenue/daily")
-    public double getDailyRevenue() {
-
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime startOfDay = now.toLocalDate().atStartOfDay();
-
-        return getRevenue(startOfDay, now);
-    }
-
-    //  NEW - Monthly Revenue API
-    @GetMapping("/revenue/monthly")
-    public double getMonthlyRevenue() {
-
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime startOfMonth = now.withDayOfMonth(1).toLocalDate().atStartOfDay();
-
-        return getRevenue(startOfMonth, now);
-    }
+   
     private double getRevenue(LocalDateTime start, LocalDateTime end) {
 
         List<Payment> payments = entityManager
