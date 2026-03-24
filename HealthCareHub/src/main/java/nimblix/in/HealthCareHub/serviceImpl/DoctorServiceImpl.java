@@ -9,6 +9,7 @@ import nimblix.in.HealthCareHub.constants.HealthCareConstants;
 import nimblix.in.HealthCareHub.model.*;
 import nimblix.in.HealthCareHub.repository.DoctorRepository;
 import nimblix.in.HealthCareHub.repository.HospitalRepository;
+import nimblix.in.HealthCareHub.repository.PatientRepository;
 import nimblix.in.HealthCareHub.repository.SpecializationRepository;
 import nimblix.in.HealthCareHub.request.DoctorRegistrationRequest;
 import nimblix.in.HealthCareHub.response.DoctorProfileResponse;
@@ -17,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import nimblix.in.HealthCareHub.service.DoctorService;
-
 
 import static nimblix.in.HealthCareHub.constants.HealthCareConstants.DOCTOR_REGISTERED_SUCCESS;
 
@@ -32,12 +32,12 @@ public class DoctorServiceImpl implements DoctorService {
     @Autowired
     SpecializationRepository specializationRepository;
 
-
+    @Autowired
+    PatientRepository patientRepository;
 
     @Override
     public List<String> getAllRoles()
     {
-
         return Arrays.stream(Role.values())
                 .map(Enum::name)
                 .toList();
@@ -50,16 +50,16 @@ public class DoctorServiceImpl implements DoctorService {
         {
             return HealthCareConstants.DOCTOR_ALREADY_EXISTS;
         }
-      
+
         Hospital hospital = hospitalRepository.findById(request.getHospitalId())
                 .orElseThrow(() -> new RuntimeException("Hospital not found"));
 
-     
+
         Specialization specialization = specializationRepository
                 .findByName(request.getSpecializationName())
                 .orElseThrow(() -> new RuntimeException("Specialization not found"));
 
-        
+
         Doctor doctor = new Doctor();
 
         doctor.setName(request.getDoctorName());
@@ -71,35 +71,27 @@ public class DoctorServiceImpl implements DoctorService {
         doctor.setPhone(request.getPhoneNo());
         doctor.setConsultationFee(request.getConsultationFee());
 
-        
         doctor.setHospital(hospital);
         doctor.setSpecialization(specialization);
 
         doctor.setIsActive("active");
 
-       
         doctorRepository.save(doctor);
 
         return "Doctor Registered Successfully";
     }
+
     @Override
     public DoctorProfileResponse getDoctorById(Long doctorId) {
-
-        // Fetch doctor details
         return doctorRepository.findDoctorProfileById(doctorId)
-
-                // If doctor not found, throw exception
                 .orElseThrow(() -> new RuntimeException("Doctor not found"));
     }
 
     @Override
     public String updateDoctor(Long doctorId, DoctorRegistrationRequest request) {
-
-        // Fetch existing doctor from DB
         Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new RuntimeException("Doctor not found"));
 
-        // Update only fields that are provided (non-null)
         if (request.getDoctorName() != null) {
             doctor.setName(request.getDoctorName());
         }
@@ -128,12 +120,20 @@ public class DoctorServiceImpl implements DoctorService {
             doctor.setConsultationFee(request.getConsultationFee());
         }
 
-        // Save updated doctor back to DB
         doctorRepository.save(doctor);
 
         return "Doctor updated successfully";
     }
 
+    @Override
+    public List<Doctor> getDoctorsByHospital(Long hospitalId) {
+        // Implementation for API 1: Returns doctors filtered by hospitalId
+        return doctorRepository.findByHospitalId(hospitalId);
+    }
 
-
+    @Override
+    public List<Patient> getPatientsSeenByDoctorInMonth(Long doctorId, int month) {
+        // Implementation for API 2: Calls the Native Query in PatientRepository
+        return patientRepository.findPatientsByDoctorAndMonth(doctorId, month);
+    }
 }

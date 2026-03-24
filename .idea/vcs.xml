@@ -4,4 +4,7 @@
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/Hospital-Doctor-Module" vcs="Git" />
   </component>
+  <component name="VcsProjectSettings">
+    <option name="detectVcsMappingsAutomatically" value="false" />
+  </component>
 </project>
