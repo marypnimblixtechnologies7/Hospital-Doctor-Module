@@ -19,3 +19,4 @@ public class DoctorAvailabilityResponse {
     private String createdTime;
     private String updatedTime;
 }
+

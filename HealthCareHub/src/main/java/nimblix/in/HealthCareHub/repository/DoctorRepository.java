@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface DoctorRepository extends JpaRepository<Doctor,Long> {
@@ -13,6 +14,9 @@ public interface DoctorRepository extends JpaRepository<Doctor,Long> {
     Optional<Doctor> findByEmailId(String emailId);
 
     Optional<Doctor> findByIdAndHospitalId(Long doctorId, Long hospitalId);
+
+    // NEW: Find all doctors associated with a specific hospital ID
+    List<Doctor> findByHospitalId(Long hospitalId);
 
     @Query("""
             SELECT new nimblix.in.HealthCareHub.response.DoctorProfileResponse(
@@ -39,4 +43,5 @@ public interface DoctorRepository extends JpaRepository<Doctor,Long> {
             WHERE d.id = :doctorId
             """)
     Optional<DoctorProfileResponse> findDoctorProfileById(@Param("doctorId") Long doctorId);
+
 }

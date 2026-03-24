@@ -14,7 +14,7 @@ public class DoctorProfileResponse {
     private String email;
     private String phone;
     private String qualification;
-    private Long experienceYears;  // IMPORTANT: must match entity type
+    private Long experienceYears;  
 
     private Long specializationId;
     private String specializationName;

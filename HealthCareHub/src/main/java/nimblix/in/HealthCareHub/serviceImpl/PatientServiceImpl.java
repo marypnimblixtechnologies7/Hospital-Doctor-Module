@@ -21,14 +21,14 @@ public class PatientServiceImpl {
         Patient patient = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Patient not found"));
 
-//        patient.setDeleted();   //  Mark as deleted
+
         repository.save(patient);
 
         return "Patient soft deleted successfully";
     }
 
     public Patient savePatient(Patient patient) {
-        // TODO Auto-generated method stub
+        
         return repository.save(patient);
     }
 

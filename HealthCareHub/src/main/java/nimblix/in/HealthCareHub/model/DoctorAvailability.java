@@ -23,7 +23,7 @@ public class DoctorAvailability {
     private String availableDate;
     private String startTime;
     private String endTime;
-    private boolean isAvailable;
+    private Boolean isAvailable;
 
     private String createdTime;
     private String updatedTime;
