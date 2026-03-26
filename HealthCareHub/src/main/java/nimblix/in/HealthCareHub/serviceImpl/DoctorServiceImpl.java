@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import nimblix.in.HealthCareHub.exception.DoctorNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +39,7 @@ public class DoctorServiceImpl implements DoctorService {
 
         // Step 1: Check doctor exists
         Doctor doctor = doctorRepository.findById(doctorId)
-                .orElseThrow(() -> new RuntimeException(HealthCareConstants.DOCTOR_NOT_FOUND));
+                .orElseThrow(() -> new DoctorNotFoundException(HealthCareConstants.DOCTOR_NOT_FOUND));
 
         // Step 2: Validate status
         if (!status.equalsIgnoreCase(HealthCareConstants.ACTIVE) &&
@@ -86,6 +87,9 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public List<DoctorAvailabilityResponse> getDoctorAvailability(Long doctorId) {
+
+        Doctor doctor = doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new DoctorNotFoundException(HealthCareConstants.DOCTOR_NOT_FOUND));
 
         List<DoctorAvailability> availabilityList = doctorAvailabilityRepository.findByDoctor_Id(doctorId);
 
